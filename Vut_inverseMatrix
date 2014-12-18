@@ -1,25 +1,33 @@
-makeCacheMatrix <- function(x = matrix()){
-	m <- NULL
-	set <- function(y) {
+#Cache function for matrix inversion;
+#The first part, makeCacheMatrix function to create "matrix object".
+#
+#
+makeCacheMatrix <- function(x = matrix()){ #input x numeric square matrix
+	m <- NULL                          #declared m for inverse matrix
+					   #as NULL when makeCacheMatrix called
+	set <- function(y) {               #set matrix form as x and NULL for m
 		x <<- y
 		m <<- NULL
 	}
-	get <- function() x
-	setMatrix <- function(solve) m <<- solve
-	getMatrix <- function() m
-	list( set = set, get = get,
+	get <- function() x                #get x matrix 
+	setMatrix <- function(solve) m <<- solve #set inverse matrix
+	getMatrix <- function() m          #get m inverse matrix
+	list( set = set, get = get,        #store result in a list
 		setMatrix = setMatrix,
 		getMatrix = getMatrix)
 }
 
-cacheMatrix <- function( x = matrix(), ...){
-	m <- x$getMatrix()
-	if(!is.null(m)){
-		message("getting cached data")
-		return(m)
+#The second part, cacheSolve function to retrive
+#the inverse from the cache if the inverse already calculated.
+#
+cacheSolve <- function( x = matrix(), ...){ #input x numeric matrix
+	m <- x$getMatrix()                  #assigned matrix to m
+	if(!is.null(m)){                    #checked m matrix is NULL
+		message("getting cached data") #showed message
+		return(m)                   #return previous m inverse matrix
 	}
-	data <- x$get()
-	m <- solve(data, ...)
+	data <- x$get()                     #checked m is not NULL
+	m <- solve(data, ...)               #process m inverse matrix
 	x$setMatrix(m)
 	m
 }
